@@ -1,0 +1,110 @@
+namespace: mern-ecommerce
+
+backend:
+  name: backend-deployment
+  label: backend-deployment
+  containerName: backend-container
+
+  replicas: 2
+
+  image:
+    repository: parthsingh2496/mern-backend
+    tag: "1.1"
+    
+
+  port: 5000
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+
+  env:
+    NODE_ENV: production
+    MONGO_URI: "mongodb://mongoadmin:mongoroot@mongodb-service:27017/huxnStore?authSource=admin"
+
+  secret:
+    name: mern-secret
+    key: JWT_SECRET
+  service:
+    name: backend-service
+    type: ClusterIP
+    port: 5000 
+  hpa:
+    name: backend-hpa
+    minReplicas: 2
+    maxReplicas: 5
+    cpuUtilization: 75
+
+frontend:
+  name: frontend-deployment
+  label: frontend-deployment
+  containerName: frontend-container
+
+  replicas: 2
+
+  image:
+    repository: parthsingh2496/mern-frontend
+    tag: "latest"
+
+  port: 80
+
+  env:
+    NODE_ENV: production
+
+  service:
+    name: frontend-service
+    type: ClusterIP
+    port: 80
+
+mongodb:
+  name: mongodb-statefulset
+  label: mongodb
+  containerName: mongodb-container
+
+  replicas: 1
+
+  image:
+    repository: mongo
+    tag: "8.0"
+  
+  port: 27017
+
+  auth:
+    username: mongoadmin
+    secretName: mern-secret
+    secretKey: MONGO_INITDB_ROOT_PASSWORD
+
+  volume:
+    name: mongodb-volume
+    mountPath: /data/db
+    accessMode: ReadWriteOnce
+    size: 2Gi
+
+  service:
+    name: mongodb-service
+    port: 27017    
+    clusterIP: None 
+
+
+secrets:
+  name: mern-secret
+
+  mongoPassword: mongoroot
+  jwtSecret: abac12afsdkjladf
+
+ingress:
+  ingressClassName: nginx
+  enabled: true
+  name: mern-ingress
+
+  host: localhost   # change later (domain / IP)
+
+  paths:
+    backend:
+      path: /api
+    frontend:
+      path: /

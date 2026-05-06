@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: mern-ecommerce
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend-deployment
+  template:
+    metadata:
+      name: backend-pod
+      labels:
+        app: backend-deployment
+        
+    spec:
+      containers:
+      - name: backend-container
+        image: parthsingh2496/mern-backend:1.1
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            memory: 256Mi
+            cpu: 500m
+        ports:
+        - containerPort: 5000
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: MONGO_URI
+          value: "mongodb://mongoadmin:mongoroot@mongodb-service:27017/huxnStore?authSource=admin"
+        - name: JWT_SECRET
+          valueFrom:
+           secretKeyRef:
+            name: mern-secret
+            key: JWT_SECRET
+        - name: PORT 
+          value: "5000"
