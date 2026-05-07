@@ -33,7 +33,7 @@ install_docker(){
 
     echo "Adding Docker repository..."
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-$(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
     echo "Installing Docker..."
@@ -61,9 +61,9 @@ install_kind(){
 
     ARCH=$(uname -m)
     if [ "$ARCH" = "x86_64" ]; then
-        curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.29.0/kind-linux-amd64
+        curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.31.0/kind-linux-amd64
     elif [ "$ARCH" = "aarch64" ]; then
-    curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.29.0/kind-linux-arm64
+    curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.31.0/kind-linux-arm64
     else
     echo "❌ Unsupported architecture: $ARCH"
     exit 1
@@ -153,7 +153,7 @@ deploy_monitoring(){
     --set prometheus.service.nodePort=30000 \
     --set grafana.service.nodePort=31000 \
     --set prometheus.service.type=NodePort \
--   -set grafana.service.type=NodePort
+    --set grafana.service.type=NodePort
     kubectl port-forward svc/prometheus-stack-kube-prom-prometheus -n monitoring 9090:9090 --address=0.0.0.0 &
     kubectl port-forward svc/prometheus-stack-grafana -n monitoring 3000:80 --address=0.0.0.0 &
 }
