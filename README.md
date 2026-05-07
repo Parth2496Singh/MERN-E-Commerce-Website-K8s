@@ -136,6 +136,29 @@ The application follows a 3-tier architecture deployed on Kubernetes.
 
 Then open: [http://localhost:8080](http://localhost:8080)
 
+## ⚡ Automated Provisioning & Cloud Bootstrap
+
+To streamline the infrastructure setup, this repository includes automation scripts for zero-touch provisioning.
+
+### 1. One-Click Deployment (`Automatic-deploy.sh`)
+This script automates the complete environment setup on a fresh Linux instance. It handles the following operations:
+- **Dependency Installation:** Automatically installs Docker, Kind, Kubectl, and Helm.
+- **Cluster Provisioning:** Creates a local Kubernetes cluster named `mycluster`.
+- **Core Add-ons:** Deploys the NGINX Ingress Controller and Metrics Server (required for HPA).
+- **Application Deployment:** Clones the repository and applies all Kubernetes manifests for the MERN stack.
+- **Observability:** Deploys the `kube-prometheus-stack` via Helm into the `monitoring` namespace.
+- **Network Access:** Configures automatic port-forwarding for the application, Grafana, and Prometheus to `0.0.0.0`.
+
+**Usage:**
+```bash
+bash <(curl -s [https://raw.githubusercontent.com/Parth2496Singh/MERN-E-Commerce-Website-K8s/main/Automatic-deploy.sh](https://raw.githubusercontent.com/Parth2496Singh/MERN-E-Commerce-Website-K8s/main/Automatic-deploy.sh))
+```
+ ### ☁️ 2. AWS EC2 Bootstrap (`ec2-bootstrap.sh`)
+-  Designed specifically for cloud environments, this script is intended to be passed as **User Data** when launching a fresh AWS EC2 instance.
+-  Updates system packages and installs foundational tools (`curl`, `git`).
+-  Automatically downloads and executes the `Automatic-deploy.sh` script.
+- **Result:** The EC2 instance boots up with the entire Kubernetes infrastructure, application, and monitoring stack fully deployed and operational, requiring zero manual SSH intervention.
+
 ## 📊 Monitoring & Observability
 The project includes monitoring integration using:
 - **Prometheus** for metrics collection
