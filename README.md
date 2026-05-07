@@ -95,8 +95,8 @@ The application follows a 3-tier architecture deployed on Kubernetes.
 ## 📂 Project Structure
 
     .
-    ├── frontend/
     ├── backend/
+    ├── frontend/
     ├── k8s/
     │   ├── frontend/
     │   ├── backend/
@@ -104,18 +104,32 @@ The application follows a 3-tier architecture deployed on Kubernetes.
     │   ├── ingress/
     │   ├── monitoring/
     │   └── namespace.yaml
-    ├── helm/
-    ├── screenshots/
-    ├── Dockerfile
-    ├── docker-compose.yml
+    ├── mern-helm/
+    ├── .gitignore
+    ├── Automatic-deploy.sh
+    ├── ec2-bootstrap.sh
+    ├── example-env.env
+    ├── mern-helm-0.1.0.tgz
+    ├── package-lock.json
+    ├── package.json
+    ├── thumb.png
     └── README.md
 
 ## 🚀 Deployment Guide
 
-### 1️⃣ Create Namespace
+You can deploy this application using either **Helm** (recommended for ease of use) or standard **Kubernetes Manifests**.
+
+### 🛳️ Option A: Deploy via Helm (Recommended)
+Helm simplifies the deployment process by packaging all resources together. To deploy the entire application in one command, run:
+
+    helm install dev-mern-helm mern-helm -n mern-ecommerce --create-namespace
+
+### ☸️ Option B: Deploy via Standard Manifests
+
+**1️⃣ Create Namespace**
     kubectl create namespace mern-ecommerce
 
-### 2️⃣ Deploy Kubernetes Resources
+**2️⃣ Deploy Kubernetes Resources**
     kubectl apply -f k8s/
 
 *This deploys:*
@@ -127,6 +141,8 @@ The application follows a 3-tier architecture deployed on Kubernetes.
 - Ingress Resources
 - Horizontal Pod Autoscaler
 
+---
+
 ### 3️⃣ Verify Cluster Resources
     kubectl get all -n mern-ecommerce
 
@@ -135,7 +151,6 @@ The application follows a 3-tier architecture deployed on Kubernetes.
     kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8080:80
 
 Then open: [http://localhost:8080](http://localhost:8080)
-
 ## ⚡ Automated Provisioning & Cloud Bootstrap
 
 To streamline the infrastructure setup, this repository includes automation scripts for zero-touch provisioning.
