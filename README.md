@@ -1,167 +1,245 @@
-# 🛒 MERN E-Commerce Store — Kubernetes Deployment
+# 🛒 MERN E-Commerce Store — Production-Style Kubernetes Deployment
 
-![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-
-
-Production-grade Kubernetes deployment of a full-stack MERN application using MongoDB StatefulSet, Ingress, and Autoscaling.
-
----
+Production-style Kubernetes deployment of a full-stack MERN e-commerce application featuring containerized services, MongoDB StatefulSet, Ingress-based routing, autoscaling, observability, and cloud-native infrastructure practices.
 
 ## 📌 Overview
+This repository contains the complete Kubernetes infrastructure and deployment setup for a MERN-based e-commerce application. 
 
+The project focuses on real-world DevOps concepts including:
+- Kubernetes orchestration
+- Stateful application deployment
+- Ingress networking
+- Horizontal autoscaling
+- Monitoring & observability
+- Secrets management
+- Containerized workloads
 
+## 👨‍💻 Project Ownership
 
-This repository contains the complete Kubernetes deployment setup for a full-stack MERN-based e-commerce application. It demonstrates a production-style cloud-native deployment using Docker, Kubernetes, and Ingress for scalable and reliable service orchestration.
+### Application Code
+The original MERN e-commerce application (React frontend, Node.js/Express backend, MongoDB integration) was developed by [HuXn-WebDev](https://github.com/HuXn-WebDev/MERN-E-Commerce-Store).
 
-* **Application Code:** The MERN e-commerce application (React frontend, Node.js/Express backend, and MongoDB database integration) was developed by [HuXn-WebDev](https://github.com/HuXn-WebDev).
-* **My Contribution:** I designed and implemented the complete DevOps lifecycle for this project. All Docker configurations, Kubernetes manifests (Namespaces, Deployments, Services, StatefulSet, HPA), Ingress routing setup, and Kubernetes Secrets management were authored and configured by me to demonstrate production-grade cloud-native deployment practices.
-
-It includes:
-- Frontend (React + Nginx)
-- Backend (Node.js + Express)
-- Database (MongoDB StatefulSet)
+### My Contribution
+I designed and implemented the complete DevOps and Kubernetes deployment workflow for this project, including:
+- Docker containerization
+- Kubernetes manifests
+- MongoDB StatefulSet deployment
+- Persistent storage configuration
 - Ingress routing
-- Kubernetes Secrets
-- Horizontal Pod Autoscaler
+- Horizontal Pod Autoscaler (HPA)
+- Kubernetes Secrets management
+- Monitoring stack integration using Prometheus & Grafana
+- Helm-based deployment packaging
 
----
+## 🏛️ Architecture
+The application follows a 3-tier architecture deployed on Kubernetes.
 
-## 🧠 Architecture
+                        User Traffic
+                              │
+                              ▼
+                    NGINX Ingress Controller
+                              │
+              ┌───────────────┴───────────────┐
+              ▼                               ▼
+        Frontend Service                Backend Service
+          (React + NGINX)              (Node.js + Express)
+                                                  │
+                                                  ▼
+                                        MongoDB StatefulSet
+                                                  │
+                                                  ▼
+                                      Persistent Volume Storage
 
-
-User requests go through Ingress Controller.
-
-Frontend Service handles UI requests.
-
-Backend Service handles API requests.
-
-MongoDB StatefulSet stores persistent data.
-
----
+## ✨ Features
+- ✅ Kubernetes-based 3-tier deployment
+- ✅ React frontend containerized with Docker
+- ✅ Node.js backend deployment with Kubernetes
+- ✅ MongoDB deployed using StatefulSet
+- ✅ Persistent storage using PV & PVC
+- ✅ Ingress-based traffic routing
+- ✅ Horizontal Pod Autoscaler (HPA)
+- ✅ Kubernetes Secrets for sensitive configuration
+- ✅ Monitoring stack using Prometheus & Grafana
+- ✅ Helm-based deployment support
+- ✅ Namespace isolation for application and monitoring stack
 
 ## 🛠️ Tech Stack
 
 | Layer | Technology |
-|------|------------|
-| Frontend | React, Nginx |
-| Backend | Node.js, Express |
-| Database | MongoDB |
-| Orchestration | Kubernetes |
-| Containerization | Docker |
-| Networking | Ingress NGINX |
-| Security | Kubernetes Secrets |
+| :--- | :--- |
+| **Frontend** | React, NGINX |
+| **Backend** | Node.js, Express |
+| **Database** | MongoDB |
+| **Containerization** | Docker |
+| **Orchestration** | Kubernetes |
+| **Networking** | Ingress NGINX |
+| **Monitoring** | Prometheus, Grafana |
+| **Packaging** | Helm |
+| **Scaling** | Horizontal Pod Autoscaler |
+| **Storage** | Persistent Volumes & PVC |
+| **Security** | Kubernetes Secrets |
 
----
+## ☸️ Kubernetes Components Used
 
-## 🚀 Deployment Steps
+| Component | Purpose |
+| :--- | :--- |
+| **Namespace** | Logical isolation of workloads |
+| **Deployment** | Stateless application management |
+| **StatefulSet** | Persistent MongoDB deployment |
+| **Service** | Internal networking between components |
+| **Ingress** | External traffic routing |
+| **Secret** | Secure storage of credentials |
+| **HPA** | Automatic scaling based on CPU usage |
+| **PV/PVC** | Persistent database storage |
 
-### 1. Create Namespace
+## 📂 Project Structure
 
-kubectl create namespace mern-ecommerce
+    .
+    ├── frontend/
+    ├── backend/
+    ├── k8s/
+    │   ├── frontend/
+    │   ├── backend/
+    │   ├── database/
+    │   ├── ingress/
+    │   ├── monitoring/
+    │   └── namespace.yaml
+    ├── helm/
+    ├── screenshots/
+    ├── Dockerfile
+    ├── docker-compose.yml
+    └── README.md
 
----
+## 🚀 Deployment Guide
 
-### 2. Deploy All Resources
+### 1️⃣ Create Namespace
+    kubectl create namespace mern-ecommerce
 
-kubectl apply -f k8s/
+### 2️⃣ Deploy Kubernetes Resources
+    kubectl apply -f k8s/
 
-This includes:
-Frontend Deployment  
-Backend Deployment  
-MongoDB StatefulSet  
-Secrets  
-Ingress  
+*This deploys:*
+- Frontend Deployment & Service
+- Backend Deployment & Service
+- MongoDB StatefulSet
+- Persistent Volume & PVC
+- Kubernetes Secrets
+- Ingress Resources
+- Horizontal Pod Autoscaler
 
----
+### 3️⃣ Verify Cluster Resources
+    kubectl get all -n mern-ecommerce
 
-### 3. Verify Deployment
+### 🌐 Access Application
+**Start Ingress Port Forward:**
+    kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8080:80
 
-kubectl get all -n mern-ecommerce
+Then open: [http://localhost:8080](http://localhost:8080)
 
----
+## 📊 Monitoring & Observability
+The project includes monitoring integration using:
+- **Prometheus** for metrics collection
+- **Grafana** for visualization and dashboards
 
-### 4. Access Application
+### Install Monitoring Stack
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    helm repo update
 
-kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8080:80
+    helm install prometheus-stack prometheus-community/kube-prometheus-stack \
+      --namespace monitoring \
+      --create-namespace
 
-Open in browser:
+### Access Prometheus
+    kubectl port-forward svc/prometheus-stack-kube-prom-prometheus -n monitoring 9090:9090 &
 
-http://localhost:8080
+Open: [http://localhost:9090](http://localhost:9090)
 
----
+### Access Grafana
+    kubectl port-forward svc/prometheus-stack-grafana -n monitoring 3000:80 &
 
-## 🔐 Secrets
+Open: [http://localhost:3000](http://localhost:3000)
 
-MongoDB username is stored as: mongoadmin  
+## 📈 Horizontal Pod Autoscaling
+The backend service is configured with a Horizontal Pod Autoscaler.
 
-Password is stored in Kubernetes Secrets (base64 encoded)
+**Check HPA Status:**
+    kubectl get hpa -n mern-ecommerce
 
-JWT secret is also stored securely in Secrets
+**Scaling Configuration:**
 
----
+| Setting | Value |
+| :--- | :--- |
+| Minimum Replicas | 2 |
+| Maximum Replicas | 5 |
+| CPU Utilization Threshold | 75% |
 
-## 📈 Autoscaling
+## 🔐 Secrets Management
+Sensitive application configuration is managed using Kubernetes Secrets, including:
+- MongoDB credentials
+- Backend environment variables
+- JWT secret keys
 
-kubectl get hpa -n mern-ecommerce
+## 🧪 API Routes
 
-Minimum Pods: 2  
-Maximum Pods: 5  
-CPU Target: 75 percent  
-
----
-
-## 🌐 API Routes
-
-Frontend route: /  
-Backend route: /api/*  
-
----
-
-## 🧪 API Endpoints
-
-GET /api/products  
-GET /api/users  
-POST /api/users/login  
-
----
+| Route | Purpose |
+| :--- | :--- |
+| `/` | Frontend Application |
+| `/api/*` | Backend API |
 
 ## 🐳 Docker Images
 
-Frontend image: parthsingh2496/mern-frontend  
-Backend image: parthsingh2496/mern-backend  
+| Service | Image |
+| :--- | :--- |
+| **Frontend** | parthsingh2496/mern-frontend |
+| **Backend** | parthsingh2496/mern-backend |
 
----
+## 🧠 Key Learnings
+This project helped me gain hands-on experience with:
+- Kubernetes workload management
+- Stateful vs stateless applications
+- Ingress networking and traffic routing
+- Persistent storage in Kubernetes
+- Horizontal autoscaling concepts
+- Monitoring and observability
+- Kubernetes debugging workflows
+- Secrets management
+- Helm-based application packaging
 
-## ⚠️ Known Behavior
-
-Database starts empty  
-JWT authentication required  
-Admin users must be created manually  
-
----
-
-## 📊 Project Highlights
-
-Kubernetes microservices architecture  
-Stateful MongoDB deployment  
-Ingress-based routing  
-Secrets management  
-Horizontal scaling with HPA  
-Production-ready DevOps setup  
-
----
+## ⚠️ Current Limitations
+- HTTPS/TLS not yet configured
+- CI/CD pipeline not yet integrated
+- Health probes still pending implementation
+- Monitoring dashboards can be further customized
 
 ## 🚀 Future Improvements
+- [ ] Implement CI/CD using GitHub Actions
+- [ ] Add readiness & liveness probes
+- [ ] Configure HTTPS using cert-manager
+- [ ] Deploy on AWS EKS
+- [ ] Implement GitOps using ArgoCD
+- [ ] Add centralized logging stack
+- [ ] Improve Grafana dashboards
+- [ ] Add OpenTelemetry instrumentation
 
-Add HTTPS using cert-manager  
-Add CI/CD pipeline using GitHub Actions  
-Add Helm charts  
-Add monitoring with Prometheus and Grafana  
-Add custom domain routing  
+## 📸 Screenshots
+*(Recommended screenshots to include in your repository folder:)*
+- Kubernetes Pods Running
+  <img width="2647" height="1330" alt="Screenshot from 2026-05-07 12-46-53" src="https://github.com/user-attachments/assets/c63ff536-5114-403e-aaaf-810ce6abb9a0" />
 
----
+- Grafana Dashboard
+  <img width="2875" height="1262" alt="Screenshot from 2026-05-07 12-55-40" src="https://github.com/user-attachments/assets/a08c2100-1aad-441c-bc9f-8a3bce5a35a0" />
 
-## 🧠 Author Note
+<img width="2875" height="1547" alt="Screenshot from 2026-05-07 12-56-47" src="https://github.com/user-attachments/assets/5d374884-5919-4228-b06c-d771893ff776" />
 
-This project demonstrates real-world DevOps practices using Kubernetes, Docker, and a full-stack MERN application deployed in a cloud-native environment.
+
+## 🧭 DevOps Focus
+This project primarily focuses on:
+- Infrastructure deployment
+- Kubernetes orchestration
+- Scalability
+- Reliability
+- Monitoring
+- Cloud-native operational practices
+
+## 📄 License
+This project is intended for educational and learning purposes.
