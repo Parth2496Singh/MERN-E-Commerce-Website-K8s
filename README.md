@@ -266,7 +266,7 @@ This project helped me gain hands-on experience with:
 - [ ] Add OpenTelemetry instrumentation
 
 ## 📸 Screenshots
-*(Recommended screenshots to include in your repository folder:)*
+
 - Kubernetes Pods Running
   <img width="2647" height="1330" alt="Screenshot from 2026-05-07 12-46-53" src="https://github.com/user-attachments/assets/c63ff536-5114-403e-aaaf-810ce6abb9a0" />
 
