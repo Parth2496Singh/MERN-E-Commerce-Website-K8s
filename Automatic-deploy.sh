@@ -121,6 +121,10 @@ cluster_create(){
     mkdir -p /home/ubuntu/.kube
     cp /root/.kube/config /home/ubuntu/.kube/config
     chown -R ubuntu:ubuntu /home/ubuntu/.kube
+
+    kubectl create clusterrolebinding kubernetes-admin-binding \
+        --clusterrole=cluster-admin \
+        --user=kubernetes-admin || true
 }
 
 install_ingress_nginx(){

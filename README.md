@@ -234,6 +234,12 @@ This project helped me gain hands-on experience with:
 - Health probes still pending implementation
 - Monitoring dashboards can be further customized
 
+## 🛑 Critical Infrastructure Challenge: Disk Exhaustion
+
+* **The Problem:** Pods perpetually failed with `ImagePullBackOff` and `ErrImagePull`. Deep inspection of the container logs revealed a fatal `no space left on device` error in the containerd overlay filesystem.
+* **The Cause:** Running Kubernetes via `Kind` means running an entire cluster node *inside* a single Docker container. Pulling heavy Node.js and MongoDB images into this nested architecture rapidly exhausted the default 8GB AWS EC2 root volume.
+* **The Fix:** Upgraded the underlying EC2 EBS volume beyond the free-tier 8GB limit to safely accommodate the massive storage overhead of Docker-in-Docker Kubernetes virtualization.
+
 ## 🚀 Future Improvements
 - [ ] Implement CI/CD using GitHub Actions
 - [ ] Add readiness & liveness probes
