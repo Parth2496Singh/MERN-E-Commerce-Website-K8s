@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 export DEBIAN_FRONTEND=noninteractive
+export KUBECONFIG=/root/.kube/config
 
 install_docker(){
 
@@ -110,6 +111,16 @@ cluster_create(){
     fi
     curl -LO https://raw.githubusercontent.com/Parth2496Singh/MERN-E-Commerce-Website-K8s/main/k8s/cluster-configure.yml
     kind create cluster --name=mycluster --config=cluster-configure.yml
+
+    echo "Waiting for Kubernetes API..."
+
+    until kubectl cluster-info >/dev/null 2>&1; do
+        sleep 5
+    done
+    echo "Kubernetes API ready."
+    mkdir -p /home/ubuntu/.kube
+    cp /root/.kube/config /home/ubuntu/.kube/config
+    chown -R ubuntu:ubuntu /home/ubuntu/.kube
 }
 
 install_ingress_nginx(){
