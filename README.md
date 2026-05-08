@@ -1,4 +1,4 @@
-# 🛒 MERN E-Commerce Store — Production-Style Kubernetes Deployment
+# 🛒 MERN E-Commerce Store — Production-Style Kubernetes Deployment with AWS EKS Exposure
 
 Production-style Kubernetes deployment of a full-stack MERN e-commerce application featuring containerized services, MongoDB StatefulSet, Ingress-based routing, autoscaling, observability, and cloud-native infrastructure practices.
 
@@ -254,6 +254,27 @@ This project helped me gain hands-on experience with:
 * **The Problem:** Pods perpetually failed with `ImagePullBackOff` and `ErrImagePull`. Deep inspection of the container logs revealed a fatal `no space left on device` error in the containerd overlay filesystem.
 * **The Cause:** Running Kubernetes via `Kind` means running an entire cluster node *inside* a single Docker container. Pulling heavy Node.js and MongoDB images into this nested architecture rapidly exhausted the default 8GB AWS EC2 root volume.
 * **The Fix:** Upgraded the underlying EC2 EBS volume beyond the free-tier 8GB limit to safely accommodate the massive storage overhead of Docker-in-Docker Kubernetes virtualization.
+
+* ## ☁️ AWS EKS Deployment Exposure
+
+As part of extending this project beyond local Kubernetes environments, the application was also deployed on Amazon EKS to gain hands-on exposure to managed Kubernetes infrastructure on AWS.
+
+Key concepts explored during the deployment process:
+
+- EKS cluster provisioning using eksctl
+- Worker node management
+- Docker image push workflow using Amazon ECR
+- Kubernetes LoadBalancer services on AWS
+- Persistent storage provisioning using EBS CSI Driver
+- MongoDB StatefulSet deployment on EKS
+- Prometheus & Grafana monitoring setup
+- IAM/OIDC integration exposure
+- Kubernetes troubleshooting in cloud environments
+
+  <img width="2867" height="1334" alt="Screenshot from 2026-05-09 01-33-12" src="https://github.com/user-attachments/assets/b01642b7-8bda-4931-9581-35579d84b799" />
+
+
+This deployment was primarily focused on practical learning and infrastructure understanding rather than production-grade optimization.
 
 ## 🚀 Future Improvements
 - [ ] Implement CI/CD using GitHub Actions
