@@ -84,7 +84,7 @@ pipeline {
         stage("Deploy to Kubernetes") {
             steps {
                 sh """
-                    kubectl apply -f k8s/namespace.yaml
+                    kubectl apply -f k8s/namespace.yml
                     sleep 5
                     kubectl apply -f k8s/
                 """
